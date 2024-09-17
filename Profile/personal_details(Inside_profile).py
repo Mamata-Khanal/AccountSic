@@ -1,0 +1,53 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+# Define your login credentials and URLs
+LOGIN_URL = "http://167.71.235.184/login"  # Replace with the actual login URL
+USERNAME = 'accountsic@mailinator.com'  # Replace with your username
+PASSWORD = 'Admin@1234'  # Replace with your password
+
+    # Initialize the WebDriver
+driver = webdriver.Chrome()  # Adjust if necessary
+driver.get("http://167.71.235.184/login")
+driver.maximize_window()
+try:
+    # Find the username and password fields by their name attribute
+    username_field = WebDriverWait(driver, 10).until(
+    EC.visibility_of_element_located((By.ID, 'outlined-adornment-confirm-password')))
+    password_field = WebDriverWait(driver, 10).until(
+    EC.visibility_of_element_located((By.ID, 'outlined-adornment-password')))
+    # Enter the username and password
+
+    username_field.send_keys("accountsic@mailinator.com")
+    password_field.send_keys("Admin@1234")
+
+    # Find the login button by its class name and click it
+    login_button = driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div/div/div/div/div/div/div/div[3]/form/div[3]/button')
+    login_button.click()
+    time.sleep(5)
+
+    # Go to profile
+    profile_button=driver.find_element(By.XPATH,'/html/body/div/div/div/header/div/div[8]')
+    profile_button.click()
+    time.sleep(2)
+
+    # Click on profile icon
+    profile_icon=driver.find_element(By.XPATH,'//div[@class="MuiListItemText-root css-sqh3xd"]/span[contains(@class, "MuiTypography-root")]//p[text()="Profile"]')
+    profile_icon.click()
+    time.sleep(2)
+
+    # Locate the personal details and click on it
+    profile_tabs = driver.find_elements(By.XPATH, '//div[@role="tablist"]//a[@role="tab"]')
+
+    # Loop through each tab and click it
+    for tab in profile_tabs:
+        tab_text=tab.text # Get the tab text optional
+        print(f"Clicking on tab:{tab_text}")
+        tab.click()
+        time.sleep(2)
+
+finally:
+    driver.quit()
